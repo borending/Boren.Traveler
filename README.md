@@ -6,3 +6,8 @@ docker
 .net core 	
 linux	
 minial api
+
+
+
+
+
