@@ -1,0 +1,11 @@
+1. 將專案使用資料庫從預設的SQL Server 改為PostgreSQL
+	1.1 利用EntityFramework 的migration 自動在PostgreSQL 建立Identity 相關資料表
+		https://rjdudley.com/installing-asp-net-core-identity-in-postgresql/
+		1.1.1 在建立好Identity 的Web 專案安裝套件: Npgsql.EntityFrameworkCore.PostgreSQL
+		1.1.2 將Web 專案中Program.cs 的AddDbContext<ApplicationDbContext>，其options 改為UseNpgsql
+		1.1.3 使用Visual Studio 中: 工具 > NuGet 套件管理員 > 套件管理主控台，安裝dotnet-ef 工具
+			中文用戶可能會遇到dotnet 指令輸出亂碼問題，可以先參考以下網址調整console 輸出編碼
+			https://blog.uwinfo.com.tw/auth/article/reiko/534
+			輸入指令安裝dotnet-ef 工具: dotnet tool install --global dotnet-ef
+			驗證是否安裝成功: dotnet ef，安裝成功會輸出一隻獨角獸的圖案+說明
+			更新dotnet ef: dotnet tool update --global dotnet-ef
