@@ -7,13 +7,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項�
 	ProjectSection(SolutionItems) = preProject
 		BuildingNotes.txt = BuildingNotes.txt
 		README.md = README.md
+		WebIdentitySQL.sql = WebIdentitySQL.sql
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boren.Traveler.Web", "Boren.Traveler.Web\Boren.Traveler.Web.csproj", "{23A08B22-6997-45F7-9FB2-CB0DF3CA525E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boren.Traveler", "Boren.Traveler\Boren.Traveler.csproj", "{5E0885F8-5F90-4E68-8EDF-2436B6195692}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boren.Traveler", "Boren.Traveler\Boren.Traveler.csproj", "{5E0885F8-5F90-4E68-8EDF-2436B6195692}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boren.Traveler.Data", "Boren.Traveler.Data\Boren.Traveler.Data.csproj", "{D880089D-9C0E-49AE-A2F4-60B19E049D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boren.Traveler.Data", "Boren.Traveler.Data\Boren.Traveler.Data.csproj", "{D880089D-9C0E-49AE-A2F4-60B19E049D13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
