@@ -1,4 +1,4 @@
-進度: 利用EF Migration 在PostgreSQL 產生Identity 相關資料表
+進度: 顯示地圖
 
 架構: .NET 8.0
 前端: KendoUI，未來目標該改為Vuetify (Vue.js)
