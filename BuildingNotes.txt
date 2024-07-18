@@ -15,3 +15,8 @@
 		1.2.3 在PostgreSQL 建立一個資料庫，並修改appsettings.json 裡的連線字串
 		1.2.3 輸入指令 dotnet ef migrations add CreateIdentity
 	1.3 產生資料庫，輸入指令: dotnet ef database update
+
+
+OTHER.1.
+Q: Scaffolding Identity 項目發生"還原封裝失敗"錯誤
+A: 將NuGet 套件更新到最新版
