@@ -12,3 +12,14 @@ linux
 minial api
 
 User stories: https://trello.com/b/wVefna5R/traveler
+
+流程:
+A: 旅遊計畫畫面
+
+建立新的Plan CRUD
+
+跳轉地圖畫面Map 
+
+可以選擇地點Spot 加入
+
+會有清單
