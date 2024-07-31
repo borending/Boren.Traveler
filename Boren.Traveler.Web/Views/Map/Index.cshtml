@@ -13,6 +13,7 @@
 
 @section Scripts {
     <script>
+        let API_KEY = 'AIzaSyDBkDAJEa7mkUlCQ679vaC1guj3hJ8TOG8';
         (g => {
             var h, a, k, p = "The Google Maps JavaScript API",
                 c = "google",
@@ -37,7 +38,7 @@
                 }));
             d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
         })({
-            key: "AIzaSyDBkDAJEa7mkUlCQ679vaC1guj3hJ8TOG8",
+            key: API_KEY,
             v: "weekly",
         });
 
@@ -53,14 +54,61 @@
                 mapId: "DEMO_MAP_ID"
             });
 
-            const marker = new AdvancedMarkerElement({
-                map: map,
-                position: position,
-                title: "Test",
-            });
+            // const marker = new AdvancedMarkerElement({
+            //     map: map,
+            //     position: position,
+            //     title: "Test",
+            // });
         }
-
         initMap();
+
+        $('#query').click(async () => {
+            debugger;
+            const { Place } = await google.maps.importLibrary("places");
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+            const { places } = await Place.searchByText({
+                textQuery: $('#input').val(),
+                fields: ['displayName', 'location', 'businessStatus'],
+                //includedType: 'restaurant',
+                //isOpenNow: true,
+                language: 'zh-TW',
+                maxResultCount: 7,
+                //minRating: 3.2,
+                //region: 'us',
+                useStrictTypeFiltering: false,
+            });
+
+            if (places.length) {
+                let place = places[0];
+                const markerView = new AdvancedMarkerElement({
+                    map,
+                    position: place.location,
+                    title: place.displayName,
+                });
+
+                const { LatLngBounds } = await google.maps.importLibrary("core");
+                const bounds = new LatLngBounds();
+                bounds.extend(place.location);
+                map.setCenter(bounds.getCenter());
+                
+                // 多筆
+                // places.forEach((place) => {
+                //     const markerView = new AdvancedMarkerElement({
+                //         map,
+                //         position: place.location,
+                //         title: place.displayName,
+                //     });
+
+                //     bounds.extend(place.location);
+                //     console.log(place);
+                // });
+
+                // map.setCenter(bounds.getCenter());
+            }
+            else
+                console.log('No results');
+        });
     </script>
 }
 
@@ -71,5 +119,10 @@
     <div class="col-md-10">
         <div id="map"></div>
     </div>
-    <div class="col-md-2">test</div>
+    <div class="col-md-2">
+        <div class="row">
+            <input class="form-control" type="text" id="input" placeholder="請輸入地點名稱" />
+            <button class="btn" id="query">查詢</button>
+        </div>
+    </div>
 </div>

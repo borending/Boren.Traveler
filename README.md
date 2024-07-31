@@ -1,5 +1,3 @@
-進度: 顯示地圖
-
 架構: .NET 8.0
 前端: KendoUI，未來目標該改為Vuetify (Vue.js)
 ＤＢ: PostgreSQL
@@ -23,3 +21,6 @@ A: 旅遊計畫畫面
 可以選擇地點Spot 加入
 
 會有清單
+
+顯示地圖: Map JavaScript API
+搜尋地點: Places API
