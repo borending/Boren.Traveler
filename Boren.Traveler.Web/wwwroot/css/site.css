@@ -28,10 +28,10 @@ header > nav > div > a.navbar-brand {
     color: #212529 !important;
 }
 
-input:focus {
+/*input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #787878 !important;
 }
 
 button:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #787878 !important;
-}
+}*/

@@ -3,8 +3,12 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@mdi/font@5.x/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify-labs.css" />
     <style>
         #map {
             height: 768px;
@@ -22,14 +26,14 @@
     </div>
     <div class="col-md-3">
         <div id="app">
-            <v-text-field :loading="loading"
-                          append-inner-icon="mdi-magnify"
-                          density="compact"
-                          label="請輸入地點名稱"
+            <v-text-field append-inner-icon="mdi-magnify"
+                          density="comfortable"
                           variant="solo"
                           hide-details
                           single-line
-                          @@click:append-inner="onClick">
+                          label="請輸入地點名稱"
+                          v-model="text"
+                          v-on:click:append-inner="onClick">
             </v-text-field>
         </div>
         <div id="list"></div>
@@ -40,12 +44,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@3.4.35/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.js"></script>
     <script>
-        const { createApp } = Vue
-        const { createVuetify } = Vuetify
-        const vuetify = createVuetify()
-        const app = createApp()
-        app.use(vuetify).mount('#app')
-
         let API_KEY = 'AIzaSyDBkDAJEa7mkUlCQ679vaC1guj3hJ8TOG8';
         (g => {
             var h, a, k, p = "The Google Maps JavaScript API",
@@ -95,48 +93,66 @@
         }
         initMap();
 
-        $('#search').click(async () => {
-            debugger;
-            const { Place } = await google.maps.importLibrary("places");
-            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-            const { places } = await Place.searchByText({
-                textQuery: $('#input').val(),
-                fields: ['displayName', 'location', 'businessStatus'],
-                language: 'zh-TW',
-                maxResultCount: 7,
-                useStrictTypeFiltering: false,
-            });
+    </script>
+    <script type="module">
+        const { createApp, ref } = Vue
+        const { createVuetify } = Vuetify
+        const vuetify = createVuetify()
 
-            if (places.length) {
-                let place = places[0];
-                const markerView = new AdvancedMarkerElement({
-                    map,
-                    position: place.location,
-                    title: place.displayName,
-                });
+        const app = createApp({
+            setup() {
+                let text = ref('')
 
-                const { LatLngBounds } = await google.maps.importLibrary("core");
-                const bounds = new LatLngBounds();
-                bounds.extend(place.location);
-                map.setCenter(bounds.getCenter());
+                async function onClick() {
+                    const { Place } = await google.maps.importLibrary("places");
+                    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-                // 多筆
-                // places.forEach((place) => {
-                //     const markerView = new AdvancedMarkerElement({
-                //         map,
-                //         position: place.location,
-                //         title: place.displayName,
-                //     });
+                    const { places } = await Place.searchByText({
+                        textQuery: text.value,
+                        fields: ['displayName', 'location', 'businessStatus'],
+                        language: 'zh-TW',
+                        maxResultCount: 7,
+                        useStrictTypeFiltering: false,
+                    });
 
-                //     bounds.extend(place.location);
-                //     console.log(place);
-                // });
+                    if (places.length) {
+                        let place = places[0];
+                        const markerView = new AdvancedMarkerElement({
+                            map,
+                            position: place.location,
+                            title: place.displayName,
+                        });
 
-                // map.setCenter(bounds.getCenter());
+                        const { LatLngBounds } = await google.maps.importLibrary("core");
+                        const bounds = new LatLngBounds();
+                        bounds.extend(place.location);
+                        map.setCenter(bounds.getCenter());
+
+                        // 多筆
+                        // places.forEach((place) => {
+                        //     const markerView = new AdvancedMarkerElement({
+                        //         map,
+                        //         position: place.location,
+                        //         title: place.displayName,
+                        //     });
+
+                        //     bounds.extend(place.location);
+                        //     console.log(place);
+                        // });
+
+                        // map.setCenter(bounds.getCenter());
+                    }
+                    else
+                        console.log('No results');
+                }
+
+                return {
+                    text,
+                    onClick
+                }
             }
-            else
-                console.log('No results');
-        });
+        })
+        app.use(vuetify).mount('#app')
     </script>
 }
