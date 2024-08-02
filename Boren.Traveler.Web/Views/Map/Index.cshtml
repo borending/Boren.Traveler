@@ -17,9 +17,6 @@
     </style>
 }
 
-<div class="text-center">
-    <h1 class="display-4">MAP</h1>
-</div>
 <div class="row">
     <div class="col-md-9">
         <div id="map"></div>
@@ -29,14 +26,15 @@
             <v-text-field append-inner-icon="mdi-magnify"
                           density="comfortable"
                           variant="solo"
-                          hide-details
                           single-line
                           label="請輸入地點名稱"
                           v-model="text"
-                          v-on:click:append-inner="onClick">
+                          v-on:click:append-inner="searching">
             </v-text-field>
+            <div id="list" v-for="item in list">
+                <p>{{item}}</p>
+            </div>
         </div>
-        <div id="list"></div>
     </div>
 </div>
 
@@ -93,8 +91,69 @@
         }
         initMap();
 
+        async function refreshList(queryText, list) {
+            const { Place } = await google.maps.importLibrary("places");
+            const { places } = await Place.searchByText({
+                textQuery: queryText,
+                fields: ['displayName', 'location', 'businessStatus'],
+                language: 'zh-TW',
+                maxResultCount: 7,
+                useStrictTypeFiltering: false,
+            });
+
+            list.value = []
+            for (i = 0; i < places.length; i++) {
+                var place = places[i]
+                console.log(place.displayName)
+                list.value.push(place.displayName)
+            }
+        }
+
+        async function setMarker(queryText) {
+            // const { Place } = await google.maps.importLibrary("places");
+            // const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+            // const { places } = await Place.searchByText({
+            //     textQuery: text.value,
+            //     fields: ['displayName', 'location', 'businessStatus'],
+            //     language: 'zh-TW',
+            //     maxResultCount: 7,
+            //     useStrictTypeFiltering: false,
+            // });
+
+            // if (places.length) {
+            //     let place = places[0];
+            //     const markerView = new AdvancedMarkerElement({
+            //         map,
+            //         position: place.location,
+            //         title: place.displayName,
+            //     });
+
+            //     const { LatLngBounds } = await google.maps.importLibrary("core");
+            //     const bounds = new LatLngBounds();
+            //     bounds.extend(place.location);
+            //     map.setCenter(bounds.getCenter());
+
+            // 多筆
+            // places.forEach((place) => {
+            //     const markerView = new AdvancedMarkerElement({
+            //         map,
+            //         position: place.location,
+            //         title: place.displayName,
+            //     });
+
+            //     bounds.extend(place.location);
+            //     console.log(place);
+            // });
+
+            // map.setCenter(bounds.getCenter());
+            //}
+            // else
+            //     console.log('No results');
+        }
 
     </script>
+
     <script type="module">
         const { createApp, ref } = Vue
         const { createVuetify } = Vuetify
@@ -103,53 +162,22 @@
         const app = createApp({
             setup() {
                 let text = ref('')
+                let list = ref([])
 
-                async function onClick() {
-                    const { Place } = await google.maps.importLibrary("places");
-                    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+                // 按下搜尋
+                async function searching() {
+                    console.log(text.value)
+                    if (!text.value)
+                        return
 
-                    const { places } = await Place.searchByText({
-                        textQuery: text.value,
-                        fields: ['displayName', 'location', 'businessStatus'],
-                        language: 'zh-TW',
-                        maxResultCount: 7,
-                        useStrictTypeFiltering: false,
-                    });
-
-                    if (places.length) {
-                        let place = places[0];
-                        const markerView = new AdvancedMarkerElement({
-                            map,
-                            position: place.location,
-                            title: place.displayName,
-                        });
-
-                        const { LatLngBounds } = await google.maps.importLibrary("core");
-                        const bounds = new LatLngBounds();
-                        bounds.extend(place.location);
-                        map.setCenter(bounds.getCenter());
-
-                        // 多筆
-                        // places.forEach((place) => {
-                        //     const markerView = new AdvancedMarkerElement({
-                        //         map,
-                        //         position: place.location,
-                        //         title: place.displayName,
-                        //     });
-
-                        //     bounds.extend(place.location);
-                        //     console.log(place);
-                        // });
-
-                        // map.setCenter(bounds.getCenter());
-                    }
-                    else
-                        console.log('No results');
+                    refreshList(text.value, list)
+                    text.value = null
                 }
 
                 return {
                     text,
-                    onClick
+                    list,
+                    searching
                 }
             }
         })
