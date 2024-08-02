@@ -3,6 +3,8 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.css" />
     <style>
         #map {
             height: 768px;
@@ -11,8 +13,39 @@
     </style>
 }
 
+<div class="text-center">
+    <h1 class="display-4">MAP</h1>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <div id="map"></div>
+    </div>
+    <div class="col-md-3">
+        <div id="app">
+            <v-text-field :loading="loading"
+                          append-inner-icon="mdi-magnify"
+                          density="compact"
+                          label="請輸入地點名稱"
+                          variant="solo"
+                          hide-details
+                          single-line
+                          @@click:append-inner="onClick">
+            </v-text-field>
+        </div>
+        <div id="list"></div>
+    </div>
+</div>
+
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.35/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.js"></script>
     <script>
+        const { createApp } = Vue
+        const { createVuetify } = Vuetify
+        const vuetify = createVuetify()
+        const app = createApp()
+        app.use(vuetify).mount('#app')
+
         let API_KEY = 'AIzaSyDBkDAJEa7mkUlCQ679vaC1guj3hJ8TOG8';
         (g => {
             var h, a, k, p = "The Google Maps JavaScript API",
@@ -62,7 +95,7 @@
         }
         initMap();
 
-        $('#query').click(async () => {
+        $('#search').click(async () => {
             debugger;
             const { Place } = await google.maps.importLibrary("places");
             const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -70,12 +103,8 @@
             const { places } = await Place.searchByText({
                 textQuery: $('#input').val(),
                 fields: ['displayName', 'location', 'businessStatus'],
-                //includedType: 'restaurant',
-                //isOpenNow: true,
                 language: 'zh-TW',
                 maxResultCount: 7,
-                //minRating: 3.2,
-                //region: 'us',
                 useStrictTypeFiltering: false,
             });
 
@@ -91,7 +120,7 @@
                 const bounds = new LatLngBounds();
                 bounds.extend(place.location);
                 map.setCenter(bounds.getCenter());
-                
+
                 // 多筆
                 // places.forEach((place) => {
                 //     const markerView = new AdvancedMarkerElement({
@@ -111,18 +140,3 @@
         });
     </script>
 }
-
-<div class="text-center">
-    <h1 class="display-4">MAP</h1>
-</div>
-<div class="row">
-    <div class="col-md-10">
-        <div id="map"></div>
-    </div>
-    <div class="col-md-2">
-        <div class="row">
-            <input class="form-control" type="text" id="input" placeholder="請輸入地點名稱" />
-            <button class="btn" id="query">查詢</button>
-        </div>
-    </div>
-</div>

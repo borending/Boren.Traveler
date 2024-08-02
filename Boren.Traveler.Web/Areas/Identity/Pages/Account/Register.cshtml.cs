@@ -1,6 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
+﻿#nullable disable
 
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -47,15 +45,15 @@ namespace Boren.Traveler.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
             [Display(Name = "電子郵件")]
+            [Required(ErrorMessage = "{0}必填")]
+            [EmailAddress(ErrorMessage = "請輸入有效的{0}")]
             public string Email { get; set; }
 
-            [Required]
-            [StringLength(20, ErrorMessage = "{0}長度需介於 {2} 至 {1} 個字之間", MinimumLength = 6)]
-            [DataType(DataType.Password)]
             [Display(Name = "密碼")]
+            [Required(ErrorMessage = "{0}必填")]
+            [StringLength(20, ErrorMessage = "{0}長度需介於 {2} 至 {1} 個字之間", MinimumLength = 8)]
+            [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
@@ -85,15 +83,13 @@ namespace Boren.Traveler.Web.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId, code, returnUrl },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -101,7 +97,7 @@ namespace Boren.Traveler.Web.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
                     }
                     else
                     {

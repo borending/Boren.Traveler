@@ -2,7 +2,23 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Styles {
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        body > div.container {
+            margin: 0px;
+            padding: 0px;
+            max-width: 100%;
+        }
+
+        img {
+            object-fit: contain;
+            max-width: 100%;
+        }
+    </style>
+}
+
+<img src="~/banner_japanese_girl.jpg" alt="osaka">

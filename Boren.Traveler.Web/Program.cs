@@ -1,7 +1,9 @@
 using Boren.Traveler.Web;
 using Boren.Traveler.Web.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,17 +24,20 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 8;
     options.Password.RequiredUniqueChars = 0;
 });
 
+//builder.Services.Configure<RequestLocalizationOptions>(options => {
+//    options.DefaultRequestCulture = new RequestCulture(new CultureInfo("zh-Hant"));
+//});
+
 var app = builder.Build();
+//app.UseRequestLocalization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
     app.UseMigrationsEndPoint();
-}
 else
 {
     app.UseExceptionHandler("/Error");
