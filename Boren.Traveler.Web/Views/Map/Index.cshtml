@@ -23,17 +23,32 @@
     </div>
     <div class="col-md-3">
         <div id="app">
-            <v-text-field append-inner-icon="mdi-magnify"
-                          density="comfortable"
-                          variant="solo"
-                          single-line
-                          label="請輸入地點名稱"
-                          v-model="text"
-                          v-on:click:append-inner="searching">
-            </v-text-field>
-            <div id="list" v-for="item in list">
-                <p>{{item}}</p>
-            </div>
+            <v-row>
+                <v-col>
+                    <v-text-field id="search"
+                                  append-inner-icon="mdi-magnify"
+                                  density="comfortable"
+                                  variant="solo"
+                                  single-line
+                                  label="請輸入地點名稱"
+                                  v-model="text"
+                                  v-on:click:append-inner="searching">
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-row v-for="item in list">
+                <v-col>
+                    <v-card variant="tonal"
+                            class="mt-0"
+                            :title="item.displayName">
+                        <v-card-actions>
+                            <v-btn>
+                                新增
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-col>
+            </v-row>
         </div>
     </div>
 </div>
@@ -91,24 +106,6 @@
         }
         initMap();
 
-        async function refreshList(queryText, list) {
-            const { Place } = await google.maps.importLibrary("places");
-            const { places } = await Place.searchByText({
-                textQuery: queryText,
-                fields: ['displayName', 'location', 'businessStatus'],
-                language: 'zh-TW',
-                maxResultCount: 7,
-                useStrictTypeFiltering: false,
-            });
-
-            list.value = []
-            for (i = 0; i < places.length; i++) {
-                var place = places[i]
-                console.log(place.displayName)
-                list.value.push(place.displayName)
-            }
-        }
-
         async function setMarker(queryText) {
             // const { Place } = await google.maps.importLibrary("places");
             // const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
@@ -165,14 +162,30 @@
                 let list = ref([])
 
                 // 按下搜尋
+                // https://developers.google.com/maps/documentation/javascript/place-search?hl=zh-tw
                 async function searching() {
-                    console.log(text.value)
                     if (!text.value)
                         return
 
-                    refreshList(text.value, list)
+                    const { Place } = await google.maps.importLibrary("places");
+                    const { places } = await Place.searchByText({
+                        textQuery: text.value,
+                        fields: ['displayName', 'location', 'formattedAddress'],
+                        language: 'zh-TW',
+                        maxResultCount: 4
+                    });
+
+                    list.value = places
                     text.value = null
                 }
+
+                // todo: 按下Enter 可以觸發搜尋
+                // async function onEnterdown(e) {
+                //     debugger;
+                //     if (e.key === "Enter")
+                //         await this.searching()
+                // }
+                // this.addEventListener("keydown", this.onEnterdown)
 
                 return {
                     text,
