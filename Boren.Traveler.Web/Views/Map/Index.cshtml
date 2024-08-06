@@ -14,6 +14,21 @@
             height: 768px;
             width: 100%;
         }
+
+        .v-card-title {
+            font-size: 1rem;
+            font-weight: bold;
+            white-space: normal;
+        }
+
+        .v-card-subtitle {
+            white-space: normal;
+        }
+
+        .v-virtual-scroll__item {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
     </style>
 }
 
@@ -30,24 +45,35 @@
                                   density="comfortable"
                                   variant="solo"
                                   single-line
+                                  hide-details
                                   label="請輸入地點名稱"
                                   v-model="text"
                                   v-on:click:append-inner="searching">
                     </v-text-field>
                 </v-col>
             </v-row>
-            <v-row v-for="item in list">
-                <v-col>
-                    <v-card variant="tonal"
-                            class="mt-0"
-                            :title="item.displayName">
-                        <v-card-actions>
-                            <v-btn>
-                                新增
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-col>
+            <v-row>
+                <v-virtual-scroll :items="list"
+                                  :height="700">
+                    <template v-slot:default="{ item }">
+                        <v-card variant="tonal">
+                            <v-row>
+                                <v-col cols="9">
+                                    <v-card-item>
+                                        <v-card-title>{{item.displayName}}</v-card-title>
+                                        <v-card-subtitle>{{item.address}}</v-card-subtitle>
+                                    </v-card-item>
+                                </v-col>
+                                <v-col cols="">
+                                    <v-card-actions>
+                                        <v-btn icon="mdi-plus" variant="elevated" size="small"></v-btn>
+                                    </v-card-actions>
+                                </v-col>
+                            </v-row>
+
+                        </v-card>
+                    </template>
+                </v-virtual-scroll>
             </v-row>
         </div>
     </div>
@@ -104,7 +130,7 @@
             //     title: "Test",
             // });
         }
-        initMap();
+        //initMap();
 
         async function setMarker(queryText) {
             // const { Place } = await google.maps.importLibrary("places");
@@ -170,10 +196,23 @@
                     const { Place } = await google.maps.importLibrary("places");
                     const { places } = await Place.searchByText({
                         textQuery: text.value,
-                        fields: ['displayName', 'location', 'formattedAddress'],
+                        fields: ['id', 'displayName', 'location', 'adrFormatAddress'],
                         language: 'zh-TW',
-                        maxResultCount: 4
+                        maxResultCount: 10
                     });
+
+                    if (places.length) {
+                        console.log(places)
+                        places.forEach(function (p) {
+                            let elements = $.parseHTML(p.adrFormatAddress);
+                            let locality = elements.find(x => x.className == 'locality')
+                            if (locality)
+                                p.address += locality.innerText
+                            let street = elements.find(x => x.className == 'street-address')
+                            if (street)
+                                p.address += street.innerText
+                        })
+                    }
 
                     list.value = places
                     text.value = null
