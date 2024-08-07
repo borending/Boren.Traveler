@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項�
 	ProjectSection(SolutionItems) = preProject
 		BuildingNotes.txt = BuildingNotes.txt
 		README.md = README.md
-		WebIdentitySQL.sql = WebIdentitySQL.sql
+		TravelerPostgreSQL.sql = TravelerPostgreSQL.sql
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boren.Traveler.Web", "Boren.Traveler.Web\Boren.Traveler.Web.csproj", "{23A08B22-6997-45F7-9FB2-CB0DF3CA525E}"
