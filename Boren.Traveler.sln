@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boren.Traveler", "Boren.Tra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boren.Traveler.Data", "Boren.Traveler.Data\Boren.Traveler.Data.csproj", "{D880089D-9C0E-49AE-A2F4-60B19E049D13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boren.Traveler.Api", "Boren.Traveler.Api\Boren.Traveler.Api.csproj", "{86F483F3-3FA5-4AC6-A925-C9D956B90AE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{D880089D-9C0E-49AE-A2F4-60B19E049D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D880089D-9C0E-49AE-A2F4-60B19E049D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D880089D-9C0E-49AE-A2F4-60B19E049D13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86F483F3-3FA5-4AC6-A925-C9D956B90AE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86F483F3-3FA5-4AC6-A925-C9D956B90AE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86F483F3-3FA5-4AC6-A925-C9D956B90AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86F483F3-3FA5-4AC6-A925-C9D956B90AE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

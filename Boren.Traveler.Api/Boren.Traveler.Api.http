@@ -1,0 +1,6 @@
+@Boren.Traveler.Api_HostAddress = http://localhost:5028
+
+GET {{Boren.Traveler.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
