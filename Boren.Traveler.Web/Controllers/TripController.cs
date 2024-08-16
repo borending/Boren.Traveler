@@ -1,4 +1,5 @@
 ﻿using Boren.Traveler.Data;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,12 @@ namespace Boren.Traveler.Web.Controllers
     //[Authorize]
     public class TripController : Controller
     {
+        private readonly string _userId;
+        public TripController()
+        {
+            _userId = this.User.Identity.GetUserId();
+        }
+
         public IActionResult List()
         {
             return View();
