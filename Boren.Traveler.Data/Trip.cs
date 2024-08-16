@@ -18,9 +18,14 @@ public partial class Trip
     public string Name { get; set; } = null!;
 
     /// <summary>
-    /// 創建時間
+    /// 開始時間
     /// </summary>
-    public DateTime Time { get; set; }
+    public DateTime Start { get; set; }
+
+    /// <summary>
+    /// 結束時間
+    /// </summary>
+    public DateTime End { get; set; }
 
     public virtual ICollection<Place> Places { get; set; } = new List<Place>();
 }

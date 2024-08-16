@@ -59,7 +59,10 @@ public partial class TravelerDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasComment("旅程名稱");
-            entity.Property(e => e.Time).HasComment("創建時間");
+
+            entity.Property(e => e.Start).HasComment("開始時間");
+
+            entity.Property(e => e.End).HasComment("結束時間");
         });
 
         OnModelCreatingPartial(modelBuilder);

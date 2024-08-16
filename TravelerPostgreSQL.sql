@@ -108,11 +108,13 @@ CREATE TABLE "Trip" (
   "Id" serial4,
   "UserId" text NOT NULL,
   "Name" varchar(255) NOT NULL,
-  "Time" timestamptz NOT NULL,
+  "Start" timestamptz NOT NULL,
+  "End" timestamptz NOT NULL,
   PRIMARY KEY ("Id")
 );
 COMMENT ON COLUMN "Trip"."Name" IS '旅程名稱';
-COMMENT ON COLUMN "Trip"."Time" IS '創建時間';
+COMMENT ON COLUMN "Trip"."Start" IS '開始時間';
+COMMENT ON COLUMN "Trip"."End" IS '結束時間';
 COMMENT ON TABLE "Trip" IS '旅程';
 
 ALTER TABLE "AspNetRoleClaims" ADD CONSTRAINT "FK_AspNetRoleClaims_AspNetRoles_RoleId" FOREIGN KEY ("RoleId") REFERENCES "AspNetRoles" ("Id") ON DELETE CASCADE ON UPDATE NO ACTION;
