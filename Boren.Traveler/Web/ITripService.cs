@@ -1,9 +1,4 @@
 ﻿using Boren.Traveler.Web.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Boren.Traveler.Web
 {
@@ -11,10 +6,10 @@ namespace Boren.Traveler.Web
     {
         Task<bool> CreateAsync(string userId, TripViewModel model);
 
-        Task<IList<object>> ReadAsync();
+        Task<List<TripViewModel>> ReadAsync(string userId);
 
-        Task<bool?> UpdateAsync();
+        Task<bool?> UpdateAsync(string userId, int id, TripViewModel model);
 
-        Task<bool?> DeleteAsync();
+        Task<bool?> DeleteAsync(string userId, int id);
     }
 }

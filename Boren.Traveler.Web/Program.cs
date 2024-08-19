@@ -1,3 +1,5 @@
+using Boren.Traveler.Data;
+using Boren.Traveler.Service;
 using Boren.Traveler.Web;
 using Boren.Traveler.Web.Data;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<TravelerDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -31,6 +34,8 @@ builder.Services.Configure<IdentityOptions>(options =>
 //builder.Services.Configure<RequestLocalizationOptions>(options => {
 //    options.DefaultRequestCulture = new RequestCulture(new CultureInfo("zh-Hant"));
 //});
+
+builder.Services.AddScoped<ITripService, TripService>();
 
 var app = builder.Build();
 //app.UseRequestLocalization();
