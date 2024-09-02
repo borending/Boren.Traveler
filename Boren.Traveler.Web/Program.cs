@@ -37,6 +37,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddScoped<ITripService, TripService>();
 
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.UseMemberCasing();
+});
+
 var app = builder.Build();
 //app.UseRequestLocalization();
 

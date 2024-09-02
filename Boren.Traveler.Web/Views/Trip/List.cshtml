@@ -96,11 +96,10 @@
 </div>
 
 @section Scripts {
-    <partial name="_Script" />
     <script src="https://cdn.jsdelivr.net/npm/vue@3.4.35/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.js"></script>
+    @* <partial name="_Script" /> *@
     <script type="module">
-        import  axios from 'axios'
         const { createApp, ref } = Vue
         const { createVuetify } = Vuetify
         const vuetify = createVuetify()
@@ -117,7 +116,7 @@
                         { title: '回程日', key: 'End', sortable: false },
                         { title: '操作', key: 'actions', sortable: false },
                     ],
-                    items: [],
+                    serverItems: [],
                     editedIndex: -1,
                     editedItem: {
                         Name: '',
@@ -201,11 +200,11 @@
                     this.fetchItems();
                 },
                 fetchItems() {
-                    debugger;
-                    axios.get(this.url).then(response => {
-                        // this.items = response.data;
-                        this.items = response;
+                    $.get(this.url, function (data) {
+                         this.serverItems = ref(data);
                     });
+
+                    // this.serverItems = [{ Name: 'Good2' }]
                 },
                 saveItem() {
                     if (this.editedIndex > -1) {

@@ -2,21 +2,19 @@
     ViewData["Title"] = "Test";
 }
 
-@section Styles {
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@mdi/font@5.x/css/materialdesignicons.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify-labs.css" />
-}
-
-<div id="app"></div>
-
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/vue@3.4.35/dist/vue.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "axios": "/lib/axios/axios.js",
+                "import": "/js/import.js"
+            }
+        }
+    </script>
     <script type="module">
-        import { createApp } from Vue
+        import axios from 'axios'
+        axios.get('https://www.google.com/').then(response => {
+            console.log('ok')
+        });
     </script>
 }
