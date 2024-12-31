@@ -130,7 +130,7 @@
             //     title: "Test",
             // });
         }
-        //initMap();
+        initMap();
 
         async function setMarker(queryText) {
             // const { Place } = await google.maps.importLibrary("places");
@@ -178,24 +178,27 @@
     </script>
 
     <script type="module">
-        const { createApp, ref } = Vue
+        const { createApp } = Vue
         const { createVuetify } = Vuetify
         const vuetify = createVuetify()
 
         const app = createApp({
-            setup() {
-                let text = ref('')
-                let list = ref([])
-
+            data() {
+                return {
+                    text: '',
+                    list: []
+                }
+            },
+            methods: {
                 // 按下搜尋
                 // https://developers.google.com/maps/documentation/javascript/place-search?hl=zh-tw
-                async function searching() {
-                    if (!text.value)
+                async searching() {
+                    if (this.text == '')
                         return
 
                     const { Place } = await google.maps.importLibrary("places");
                     const { places } = await Place.searchByText({
-                        textQuery: text.value,
+                        textQuery: this.text,
                         fields: ['id', 'displayName', 'location', 'adrFormatAddress'],
                         language: 'zh-TW',
                         maxResultCount: 10
@@ -204,6 +207,7 @@
                     if (places.length) {
                         console.log(places)
                         places.forEach(function (p) {
+                            p.address = ''
                             let elements = $.parseHTML(p.adrFormatAddress);
                             let locality = elements.find(x => x.className == 'locality')
                             if (locality)
@@ -214,8 +218,8 @@
                         })
                     }
 
-                    list.value = places
-                    text.value = null
+                    this.list = places
+                    this.text = null
                 }
 
                 // todo: 按下Enter 可以觸發搜尋
@@ -225,12 +229,6 @@
                 //         await this.searching()
                 // }
                 // this.addEventListener("keydown", this.onEnterdown)
-
-                return {
-                    text,
-                    list,
-                    searching
-                }
             }
         })
         app.use(vuetify).mount('#app')

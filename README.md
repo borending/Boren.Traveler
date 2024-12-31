@@ -1,5 +1,5 @@
 架構: .NET 8.0
-前端: KendoUI，未來目標該改為Vuetify (Vue.js)
+前端: Vuetify (Vue.js): OptionAPI + HTML
 ＤＢ: PostgreSQL
 
 身分驗證	
