@@ -29,6 +29,10 @@
             padding-top: 3px;
             padding-bottom: 3px;
         }
+
+        .search {
+            padding-bottom: 0px;
+        }
     </style>
 }
 
@@ -39,41 +43,67 @@
     <div class="col-md-3">
         <div id="app">
             <v-row>
-                <v-col>
-                    <v-text-field id="search"
-                                  append-inner-icon="mdi-magnify"
-                                  density="comfortable"
-                                  variant="solo"
-                                  single-line
-                                  hide-details
-                                  label="請輸入地點名稱"
-                                  v-model="text"
-                                  v-on:click:append-inner="searching">
-                    </v-text-field>
+                <v-col class="search">
+                    <v-form @@submit.prevent
+                            v-on:submit="searching">
+                        <v-text-field id="search"
+                                      append-inner-icon="mdi-magnify"
+                                      density="comfortable"
+                                      variant="solo"
+                                      single-line
+                                      hide-details
+                                      clearable
+                                      label="請輸入地點名稱"
+                                      v-model="text"
+                                      v-on:click:append-inner="searching">
+                        </v-text-field>
+                    </v-form>
                 </v-col>
             </v-row>
             <v-row>
-                <v-virtual-scroll :items="list"
-                                  :height="700">
-                    <template v-slot:default="{ item }">
-                        <v-card variant="tonal">
-                            <v-row>
-                                <v-col cols="9">
-                                    <v-card-item>
-                                        <v-card-title>{{item.displayName}}</v-card-title>
-                                        <v-card-subtitle>{{item.address}}</v-card-subtitle>
-                                    </v-card-item>
-                                </v-col>
-                                <v-col cols="">
-                                    <v-card-actions>
-                                        <v-btn icon="mdi-plus" variant="elevated" size="small"></v-btn>
-                                    </v-card-actions>
-                                </v-col>
-                            </v-row>
+                <v-col>
+                    <v-tabs v-model="tab" grow>
+                        <v-tab prepend-icon="mdi-map-search-outline" value="search-result">搜尋結果</v-tab>
+                        <v-tab prepend-icon="mdi-playlist-check" value="selected">已選地點</v-tab>
+                    </v-tabs>
 
-                        </v-card>
-                    </template>
-                </v-virtual-scroll>
+                    <v-tabs-window v-model="tab">
+                        <v-tabs-window-item value="search-result">
+                            <v-card flat>
+                                <v-virtual-scroll :items="list">
+                                    @* :height="700"> *@
+                                    <template v-slot:default="{ item }">
+                                        <v-card variant="tonal">
+                                            <v-row>
+                                                <v-col cols="9">
+                                                    <v-card-item @@click="onPlaceClicked(item)">
+                                                        <v-card-title>{{item.displayName}}</v-card-title>
+                                                        <v-card-subtitle>{{item.address}}</v-card-subtitle>
+                                                    </v-card-item>
+                                                </v-col>
+                                                <v-col cols="">
+                                                    <v-card-actions>
+                                                        <v-btn icon="mdi-plus" variant="elevated" size="small"></v-btn>
+                                                    </v-card-actions>
+                                                </v-col>
+                                            </v-row>
+
+                                        </v-card>
+                                    </template>
+                                </v-virtual-scroll>
+                            </v-card>
+                        </v-tabs-window-item>
+                        <v-tabs-window-item value="selected">
+                            <v-card flat>
+                                @*                                 <v-card-text>
+                                <p>
+                                Morbi nec metus. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non adipiscing dolor urna a orci. Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Nunc sed turpis.
+                                </p>
+                                </v-card-text> *@
+                            </v-card>
+                        </v-tabs-window-item>
+                    </v-tabs-window>
+                </v-col>
             </v-row>
         </div>
     </div>
@@ -123,56 +153,66 @@
                 zoom: 16,
                 mapId: "DEMO_MAP_ID"
             });
-
-            // const marker = new AdvancedMarkerElement({
-            //     map: map,
-            //     position: position,
-            //     title: "Test",
-            // });
         }
         initMap();
 
-        async function setMarker(queryText) {
-            // const { Place } = await google.maps.importLibrary("places");
-            // const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+        // async function setMarker(queryText) {
+        //     // const { Place } = await google.maps.importLibrary("places");
+        //     // const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-            // const { places } = await Place.searchByText({
-            //     textQuery: text.value,
-            //     fields: ['displayName', 'location', 'businessStatus'],
-            //     language: 'zh-TW',
-            //     maxResultCount: 7,
-            //     useStrictTypeFiltering: false,
-            // });
+        //     // const { places } = await Place.searchByText({
+        //     //     textQuery: text.value,
+        //     //     fields: ['displayName', 'location', 'businessStatus'],
+        //     //     language: 'zh-TW',
+        //     //     maxResultCount: 7,
+        //     //     useStrictTypeFiltering: false,
+        //     // });
 
-            // if (places.length) {
-            //     let place = places[0];
-            //     const markerView = new AdvancedMarkerElement({
-            //         map,
-            //         position: place.location,
-            //         title: place.displayName,
-            //     });
+        //     // if (places.length) {
+        //     //     let place = places[0];
+        //     //     const markerView = new AdvancedMarkerElement({
+        //     //         map,
+        //     //         position: place.location,
+        //     //         title: place.displayName,
+        //     //     });
 
-            //     const { LatLngBounds } = await google.maps.importLibrary("core");
-            //     const bounds = new LatLngBounds();
-            //     bounds.extend(place.location);
-            //     map.setCenter(bounds.getCenter());
+        //     //     const { LatLngBounds } = await google.maps.importLibrary("core");
+        //     //     const bounds = new LatLngBounds();
+        //     //     bounds.extend(place.location);
+        //     //     map.setCenter(bounds.getCenter());
 
-            // 多筆
-            // places.forEach((place) => {
-            //     const markerView = new AdvancedMarkerElement({
-            //         map,
-            //         position: place.location,
-            //         title: place.displayName,
-            //     });
+        //     // 多筆
+        //     // places.forEach((place) => {
+        //     //     const markerView = new AdvancedMarkerElement({
+        //     //         map,
+        //     //         position: place.location,
+        //     //         title: place.displayName,
+        //     //     });
 
-            //     bounds.extend(place.location);
-            //     console.log(place);
-            // });
+        //     //     bounds.extend(place.location);
+        //     //     console.log(place);
+        //     // });
 
-            // map.setCenter(bounds.getCenter());
-            //}
-            // else
-            //     console.log('No results');
+        //     // map.setCenter(bounds.getCenter());
+        //     //}
+        //     // else
+        //     //     console.log('No results');
+        // }
+
+        let markerView
+        async function setMarker(item) {
+            console.log('clicked')
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+            markerView = new AdvancedMarkerElement({
+                map,
+                position: item.location,
+                title: item.displayName,
+            });
+
+            const { LatLngBounds } = await google.maps.importLibrary("core");
+            const bounds = new LatLngBounds();
+            bounds.extend(item.location);
+            map.setCenter(bounds.getCenter());
         }
 
     </script>
@@ -185,14 +225,15 @@
         const app = createApp({
             data() {
                 return {
+                    tab: 'search-result',
                     text: '',
                     list: []
                 }
             },
             methods: {
-                // 按下搜尋
-                // https://developers.google.com/maps/documentation/javascript/place-search?hl=zh-tw
                 async searching() {
+                    // 按下搜尋
+                    // https://developers.google.com/maps/documentation/javascript/place-search?hl=zh-tw
                     if (this.text == '')
                         return
 
@@ -220,15 +261,10 @@
 
                     this.list = places
                     this.text = null
+                },
+                onPlaceClicked(item) {
+                    setMarker(item)
                 }
-
-                // todo: 按下Enter 可以觸發搜尋
-                // async function onEnterdown(e) {
-                //     debugger;
-                //     if (e.key === "Enter")
-                //         await this.searching()
-                // }
-                // this.addEventListener("keydown", this.onEnterdown)
             }
         })
         app.use(vuetify).mount('#app')

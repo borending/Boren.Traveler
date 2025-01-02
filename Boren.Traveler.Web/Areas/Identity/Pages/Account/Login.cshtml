@@ -37,14 +37,12 @@
                 <p>
                     <a id="forgot-password" asp-page="./ForgotPassword">忘記密碼</a>
                 </p>
-                <div>
+                <div class="mb-3">
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-lg btn-outline-secondary">登入</button>
                 </div>
-                <div>
-                    <p>
-                        還不是會員嗎?　<a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">馬上註冊新帳號</a>
-                    </p>
-                </div>
+                <p>
+                    還不是會員嗎?　<a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">馬上註冊新帳號</a>
+                </p>
             </form>
         </section>
     </div>
