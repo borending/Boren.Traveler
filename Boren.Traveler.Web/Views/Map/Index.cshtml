@@ -70,8 +70,7 @@
                     <v-tabs-window v-model="tab">
                         <v-tabs-window-item value="search-result">
                             <v-card flat>
-                                <v-virtual-scroll :items="list">
-                                    @* :height="700"> *@
+                                <v-virtual-scroll :items="list" :height="660">
                                     <template v-slot:default="{ item }">
                                         <v-card variant="tonal">
                                             <v-row>
@@ -81,7 +80,7 @@
                                                         <v-card-subtitle>{{item.address}}</v-card-subtitle>
                                                     </v-card-item>
                                                 </v-col>
-                                                <v-col cols="">
+                                                <v-col cols="3">
                                                     <v-card-actions>
                                                         <v-btn icon="mdi-plus" variant="elevated" size="small"></v-btn>
                                                     </v-card-actions>
@@ -95,11 +94,26 @@
                         </v-tabs-window-item>
                         <v-tabs-window-item value="selected">
                             <v-card flat>
-                                @*                                 <v-card-text>
-                                <p>
-                                Morbi nec metus. Suspendisse faucibus, nunc et pellentesque egestas, lacus ante convallis tellus, vitae iaculis lacus elit id tortor. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam libero, non adipiscing dolor urna a orci. Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Nunc sed turpis.
-                                </p>
-                                </v-card-text> *@
+                                <v-virtual-scroll :items="selectedList" :height="660">
+                                    <template v-slot:default="{ item }">
+                                        <v-card variant="tonal">
+                                            <v-row>
+                                                <v-col cols="9">
+                                                    <v-card-item @@click="onPlaceClicked(item)">
+                                                        <v-card-title>{{item.displayName}}</v-card-title>
+                                                        <v-card-subtitle>{{item.address}}</v-card-subtitle>
+                                                    </v-card-item>
+                                                </v-col>
+                                                <v-col cols="3">
+                                                    <v-card-actions>
+                                                        <v-btn icon="mdi-cancel" variant="elevated" size="small"></v-btn>
+                                                    </v-card-actions>
+                                                </v-col>
+                                            </v-row>
+
+                                        </v-card>
+                                    </template>
+                                </v-virtual-scroll>
                             </v-card>
                         </v-tabs-window-item>
                     </v-tabs-window>
@@ -112,111 +126,7 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/vue@3.4.35/dist/vue.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.6.14/dist/vuetify.min.js"></script>
-    <script>
-        let API_KEY = 'AIzaSyDBkDAJEa7mkUlCQ679vaC1guj3hJ8TOG8';
-        (g => {
-            var h, a, k, p = "The Google Maps JavaScript API",
-                c = "google",
-                l = "importLibrary",
-                q = "__ib__",
-                m = document,
-                b = window;
-            b = b[c] || (b[c] = {});
-            var d = b.maps || (b.maps = {}),
-                r = new Set,
-                e = new URLSearchParams,
-                u = () => h || (h = new Promise(async (f, n) => {
-                    await (a = m.createElement("script"));
-                    e.set("libraries", [...r] + "");
-                    for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
-                    e.set("callback", c + ".maps." + q);
-                    a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
-                    d[q] = f;
-                    a.onerror = () => h = n(Error(p + " could not load."));
-                    a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-                    m.head.append(a)
-                }));
-            d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
-        })({
-            key: API_KEY,
-            v: "weekly",
-        });
-
-        let map;
-        async function initMap() {
-            const position = { lat: 34.70317583942373, lng: 135.4976065215495 };
-            const { Map } = await google.maps.importLibrary("maps");
-            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-
-            map = new Map(document.getElementById("map"), {
-                center: position,
-                zoom: 16,
-                mapId: "DEMO_MAP_ID"
-            });
-        }
-        initMap();
-
-        // async function setMarker(queryText) {
-        //     // const { Place } = await google.maps.importLibrary("places");
-        //     // const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-
-        //     // const { places } = await Place.searchByText({
-        //     //     textQuery: text.value,
-        //     //     fields: ['displayName', 'location', 'businessStatus'],
-        //     //     language: 'zh-TW',
-        //     //     maxResultCount: 7,
-        //     //     useStrictTypeFiltering: false,
-        //     // });
-
-        //     // if (places.length) {
-        //     //     let place = places[0];
-        //     //     const markerView = new AdvancedMarkerElement({
-        //     //         map,
-        //     //         position: place.location,
-        //     //         title: place.displayName,
-        //     //     });
-
-        //     //     const { LatLngBounds } = await google.maps.importLibrary("core");
-        //     //     const bounds = new LatLngBounds();
-        //     //     bounds.extend(place.location);
-        //     //     map.setCenter(bounds.getCenter());
-
-        //     // 多筆
-        //     // places.forEach((place) => {
-        //     //     const markerView = new AdvancedMarkerElement({
-        //     //         map,
-        //     //         position: place.location,
-        //     //         title: place.displayName,
-        //     //     });
-
-        //     //     bounds.extend(place.location);
-        //     //     console.log(place);
-        //     // });
-
-        //     // map.setCenter(bounds.getCenter());
-        //     //}
-        //     // else
-        //     //     console.log('No results');
-        // }
-
-        let markerView
-        async function setMarker(item) {
-            console.log('clicked')
-            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
-            markerView = new AdvancedMarkerElement({
-                map,
-                position: item.location,
-                title: item.displayName,
-            });
-
-            const { LatLngBounds } = await google.maps.importLibrary("core");
-            const bounds = new LatLngBounds();
-            bounds.extend(item.location);
-            map.setCenter(bounds.getCenter());
-        }
-
-    </script>
-
+    <script src="~/js/map.js"></script>
     <script type="module">
         const { createApp } = Vue
         const { createVuetify } = Vuetify
@@ -227,43 +137,20 @@
                 return {
                     tab: 'search-result',
                     text: '',
-                    list: []
+                    list: [],
+                    selectedList: JSON.parse(localStorage.getItem("traveler_selectedList"))
                 }
             },
             methods: {
                 async searching() {
-                    // 按下搜尋
-                    // https://developers.google.com/maps/documentation/javascript/place-search?hl=zh-tw
-                    if (this.text == '')
-                        return
-
-                    const { Place } = await google.maps.importLibrary("places");
-                    const { places } = await Place.searchByText({
-                        textQuery: this.text,
-                        fields: ['id', 'displayName', 'location', 'adrFormatAddress'],
-                        language: 'zh-TW',
-                        maxResultCount: 10
-                    });
-
-                    if (places.length) {
-                        console.log(places)
-                        places.forEach(function (p) {
-                            p.address = ''
-                            let elements = $.parseHTML(p.adrFormatAddress);
-                            let locality = elements.find(x => x.className == 'locality')
-                            if (locality)
-                                p.address += locality.innerText
-                            let street = elements.find(x => x.className == 'street-address')
-                            if (street)
-                                p.address += street.innerText
-                        })
-                    }
-
-                    this.list = places
+                    this.list = await searchByText(this.text)
+                    this.selectedList = this.list
                     this.text = null
+
+                    localStorage.setItem('traveler_selectedList', JSON.stringify(this.list))
                 },
-                onPlaceClicked(item) {
-                    setMarker(item)
+                async onPlaceClicked(item) {
+                    await setMarker(item)
                 }
             }
         })

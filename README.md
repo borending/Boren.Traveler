@@ -2,6 +2,23 @@
 前端: Vuetify (Vue.js): OptionAPI + HTML
 ＤＢ: PostgreSQL
 
+選擇地點
+
+畫面一進來 > 讀出已選清單
+
+搜尋結果
+點+ > 存到localStorage > + 變成- > 點- > 從localStorage 中移除
+
+已選清單
+響應式讀出已選清單 > 點- > 從localStorage 中移除
+
+# done: 已選清單已經可以從localStorage 拿資料出來了
+# doing: 點+ 可以存到localStorage
+
+
+
+
+
 身分驗證	
 OpenId+內建+JWT
 OOP
@@ -10,8 +27,6 @@ linux
 minial api
 
 User stories: https://trello.com/b/wVefna5R/traveler
-
-# 有bug: 選其他地點之後mark 不會清除
 
 # 檢討流程
 # 參考iPad 裡面的心智圖
